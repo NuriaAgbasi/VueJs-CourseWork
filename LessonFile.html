@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Lesson Shop</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <link rel="stylesheet" href="Index.css">
+</head>
+<body>
+  <div id="app">
+    <nav class="navbar">
+      <h1>Vue.js Lesson Shop</h1>
+      <div class="cart">
+        🛒 {{ cartItemsCount }} 
+        <button @click="goToCheckout">Checkout</button>
+      </div>
+    </nav>
+
+    <div class="product-container" v-if="showProductList">
+      <div class="lesson-container">
+        <img :src="lesson.imagePath" :alt="lesson.imageAlt">
+        <div class="title">{{ lesson.subject }}</div>
+        <div class="description">Let your child be as great has Isaac Newton</div>
+        <div class="price">Price: ${{ lesson.price }}</div>
+        <button @click="addToCart" :disabled="lesson.stock === 0" class="add-to-cart-btn">
+          Add to cart
+        </button>
+        <div class="stock">Available: {{ lesson.stock }}</div>
+      </div>
+    </div>
+
+    <div v-if="!showProductList" id="cart-container">
+      <h2>Welcome to the Checkout Page</h2>
+      <p>You have {{ cartItemsCount }} item(s) in your cart.</p>
+      <button @click="goBackToProducts">Back to products</button>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        lesson: {
+          subject: 'Mathematics Course',
+          price: 20,
+          stock: 5,
+          imagePath: 'Maths.png',
+          imageAlt: 'Math'
+        },
+        cartItemsCount: 0,
+        showProductList: true,
+      },
+      methods: {
+        addToCart() {
+          if (this.lesson.stock > 0) {
+            this.cartItemsCount++;
+            this.lesson.stock--;
+          }
+        },
+        goToCheckout() {
+          this.showProductList = false;
+        },
+        goBackToProducts() {
+          this.showProductList = true;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
